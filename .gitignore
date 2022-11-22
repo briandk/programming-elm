@@ -4,3 +4,5 @@ elm-stuff
 repl-temp-*
 # Node modules
 node_modules
+# HTML output from the elm compiler
+index.html
