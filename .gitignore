@@ -6,3 +6,5 @@ repl-temp-*
 node_modules
 # HTML output from the elm compiler
 index.html
+# Mac-specific files
+.DS_Store
