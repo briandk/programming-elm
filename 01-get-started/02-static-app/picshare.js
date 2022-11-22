@@ -4419,6 +4419,7 @@ var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
+var $author$project$Picshare$baseUrl = 'https://programming-elm.com/';
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -4430,6 +4431,8 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$Attributes$src = function (url) {
@@ -4438,8 +4441,44 @@ var $elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Picshare$viewDetailedPhoto = F2(
+	function (url, caption) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('detailed-photo')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$img,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$src(url)
+						]),
+					_List_Nil),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('photo-info')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$h2,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('caption')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(caption)
+								]))
+						]))
+				]));
+	});
 var $author$project$Picshare$main = A2(
 	$elm$html$Html$div,
 	_List_Nil,
@@ -4469,41 +4508,9 @@ var $author$project$Picshare$main = A2(
 				]),
 			_List_fromArray(
 				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('detailed-photo')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$img,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$src('https://programming-elm.com/1.jpg')
-								]),
-							_List_Nil),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('photo-info')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$h2,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('caption')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Surfing')
-										]))
-								]))
-						]))
+					A2($author$project$Picshare$viewDetailedPhoto, $author$project$Picshare$baseUrl + '1.jpg', 'Surfing'),
+					A2($author$project$Picshare$viewDetailedPhoto, $author$project$Picshare$baseUrl + '2.jpg', 'The Fox'),
+					A2($author$project$Picshare$viewDetailedPhoto, $author$project$Picshare$baseUrl + '3.jpg', 'Evening')
 				]))
 		]));
 _Platform_export({'Picshare':{'init':_VirtualDom_init($author$project$Picshare$main)(0)(0)}});}(this));
