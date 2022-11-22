@@ -1,0 +1,24 @@
+{
+  "name": "programming-elm",
+  "version": "1.0.0",
+  "description": "My code working through the book Programming Elm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briandk/programming-elm.git"
+  },
+  "author": "Brian A. Danielak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/briandk/programming-elm/issues"
+  },
+  "homepage": "https://github.com/briandk/programming-elm#readme",
+  "dependencies": {
+    "elm-format": "^0.8.5",
+    "elm-review": "^2.8.2",
+    "elm-test": "^0.19.1-revision10"
+  }
+}
