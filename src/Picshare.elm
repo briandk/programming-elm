@@ -41,10 +41,9 @@ viewDetailedPhoto model =
         , div [ class "photo-info" ]
             [ div [ class "like-button" ]
                 [ i
-                    -- (4)
-                    [ class "fa fa-2x" -- (5)
-                    , class buttonClass -- (6)
-                    , onClick msg -- (7)
+                    [ class "fa fa-2x"
+                    , class buttonClass
+                    , onClick msg
                     ]
                     []
                 ]
