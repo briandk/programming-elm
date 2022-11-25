@@ -1,18 +1,51 @@
-module Picshare exposing (main)
+module Picshare exposing (main, photoDecoder)
 
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (class, disabled, placeholder, src, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
+import Json.Decode exposing (Decoder, bool, int, list, string, succeed)
+import Json.Decode.Pipeline exposing (hardcoded, required)
 
 
-type alias Model =
-    { url : String
+type alias Id =
+    Int
+
+
+type alias Photo =
+    { id : Id
+    , url : String
     , caption : String
     , liked : Bool
     , comments : List String
     , newComment : String
     }
+
+
+photo : Id -> String -> String -> Bool -> List String -> String -> Photo
+photo id url caption liked comments newComment =
+    { id = id
+    , url = url
+    , caption = caption
+    , liked = liked
+    , comments = comments
+    , newComment = newComment
+    }
+
+
+type alias Model =
+    Photo
+
+
+photoDecoder : Decoder Photo
+photoDecoder =
+    succeed photo
+        |> required "id" int
+        |> required "url" string
+        |> required "caption" string
+        |> required "liked" bool
+        |> required "comments" (list string)
+        |> hardcoded ""
 
 
 baseUrl : String
@@ -22,7 +55,8 @@ baseUrl =
 
 initialModel : Model
 initialModel =
-    { url = baseUrl ++ "1.jpg"
+    { id = 1
+    , url = baseUrl ++ "1.jpg"
     , caption = "Surfing"
     , liked = False
     , comments = [ "Cowabunga, Dude!" ]
