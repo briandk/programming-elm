@@ -6125,15 +6125,15 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
+var $author$project$Picshare$Photo = F6(
+	function (id, url, caption, liked, comments, newComment) {
+		return {caption: caption, comments: comments, id: id, liked: liked, newComment: newComment, url: url};
+	});
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded = A2($elm$core$Basics$composeR, $elm$json$Json$Decode$succeed, $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom);
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$list = _Json_decodeList;
-var $author$project$Picshare$photo = F6(
-	function (id, url, caption, liked, comments, newComment) {
-		return {caption: caption, comments: comments, id: id, liked: liked, newComment: newComment, url: url};
-	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
 	function (key, valDecoder, decoder) {
@@ -6166,20 +6166,23 @@ var $author$project$Picshare$photoDecoder = A2(
 						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
 						'id',
 						$elm$json$Json$Decode$int,
-						$elm$json$Json$Decode$succeed($author$project$Picshare$photo)))))));
+						$elm$json$Json$Decode$succeed($author$project$Picshare$Photo)))))));
 var $author$project$Picshare$fetchFeed = $elm$http$Http$get(
 	{
 		expect: A2($elm$http$Http$expectJson, $author$project$Picshare$LoadFeed, $author$project$Picshare$photoDecoder),
 		url: $author$project$Picshare$baseUrl + 'feed/1'
 	});
 var $author$project$Picshare$initialModel = {
-	caption: 'Surfing',
-	comments: _List_fromArray(
-		['Cowabunga, Dude!']),
-	id: 1,
-	liked: false,
-	newComment: '',
-	url: $author$project$Picshare$baseUrl + '1.jpg'
+	photo: $elm$core$Maybe$Just(
+		{
+			caption: 'Surfing',
+			comments: _List_fromArray(
+				['Cowabunga, Dude!']),
+			id: 1,
+			liked: false,
+			newComment: '',
+			url: $author$project$Picshare$baseUrl + '1.jpg'
+		})
 };
 var $author$project$Picshare$init = function (_v0) {
 	return _Utils_Tuple2($author$project$Picshare$initialModel, $author$project$Picshare$fetchFeed);
@@ -6191,24 +6194,49 @@ var $author$project$Picshare$subscriptions = function (model) {
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $elm$core$Basics$not = _Basics_not;
 var $elm$core$String$trim = _String_trim;
-var $author$project$Picshare$saveNewComment = function (model) {
-	var comment = $elm$core$String$trim(model.newComment);
+var $author$project$Picshare$saveNewComment = function (photo) {
+	var comment = $elm$core$String$trim(photo.newComment);
 	if (comment === '') {
-		return model;
+		return photo;
 	} else {
 		return _Utils_update(
-			model,
+			photo,
 			{
 				comments: _Utils_ap(
-					model.comments,
+					photo.comments,
 					_List_fromArray(
 						[comment])),
 				newComment: ''
 			});
 	}
 };
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Picshare$toggleLike = function (photo) {
+	return _Utils_update(
+		photo,
+		{liked: !photo.liked});
+};
+var $author$project$Picshare$updateComment = F2(
+	function (comment, photo) {
+		return _Utils_update(
+			photo,
+			{newComment: comment});
+	});
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Picshare$updateFeed = F2(
+	function (updatePhoto, maybePhoto) {
+		return A2($elm$core$Maybe$map, updatePhoto, maybePhoto);
+	});
 var $author$project$Picshare$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6216,18 +6244,29 @@ var $author$project$Picshare$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{liked: !model.liked}),
+						{
+							photo: A2($author$project$Picshare$updateFeed, $author$project$Picshare$toggleLike, model.photo)
+						}),
 					$elm$core$Platform$Cmd$none);
 			case 'UpdateComment':
 				var comment = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{newComment: comment}),
+						{
+							photo: A2(
+								$author$project$Picshare$updateFeed,
+								$author$project$Picshare$updateComment(comment),
+								model.photo)
+						}),
 					$elm$core$Platform$Cmd$none);
 			case 'SaveComment':
 				return _Utils_Tuple2(
-					$author$project$Picshare$saveNewComment(model),
+					_Utils_update(
+						model,
+						{
+							photo: A2($author$project$Picshare$updateFeed, $author$project$Picshare$saveNewComment, model.photo)
+						}),
 					$elm$core$Platform$Cmd$none);
 			default:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -6483,6 +6522,14 @@ var $author$project$Picshare$viewDetailedPhoto = function (model) {
 					]))
 			]));
 };
+var $author$project$Picshare$viewFeed = function (maybePhoto) {
+	if (maybePhoto.$ === 'Just') {
+		var photo = maybePhoto.a;
+		return $author$project$Picshare$viewDetailedPhoto(photo);
+	} else {
+		return $elm$html$Html$text('');
+	}
+};
 var $author$project$Picshare$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6513,7 +6560,7 @@ var $author$project$Picshare$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Picshare$viewDetailedPhoto(model)
+						$author$project$Picshare$viewFeed(model.photo)
 					]))
 			]));
 };
