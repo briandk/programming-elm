@@ -23,17 +23,6 @@ type alias Photo =
     }
 
 
-photoConstructor : Id -> String -> String -> Bool -> List String -> String -> Photo
-photoConstructor id url caption liked comments newComment =
-    { id = id
-    , url = url
-    , caption = caption
-    , liked = liked
-    , comments = comments
-    , newComment = newComment
-    }
-
-
 type alias Model =
     { photo : Maybe Photo }
 
